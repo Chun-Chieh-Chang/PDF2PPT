@@ -231,6 +231,13 @@
 
             </div>
 
+            <!-- API Key Input -->
+            <div class="bg-white px-2 py-1 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
+                <span class="font-black text-slate-400 uppercase tracking-widest leading-none text-size-11">GEMINI
+                    KEY</span>
+                <input type="password" id="api-key-input" placeholder="貼上 API Key..." class="input-compact w-48" />
+            </div>
+
             <div class="bg-white px-2 py-1 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
 
                 <span
@@ -604,7 +611,8 @@
 
                     <div
                         class="slot-waiting absolute inset-0 bg-slate-900/10 hidden flex flex-col items-center justify-center font-black">
-                        <span class="waiting-badge text-size-11">QUEUED</span></div>
+                        <span class="waiting-badge text-size-11">QUEUED</span>
+                    </div>
 
                 </div>
 
@@ -651,7 +659,15 @@
 
     <script>
 
-        const apiKey = "";
+        let apiKey = localStorage.getItem('GEMINI_API_KEY') || "";
+        const apiKeyInput = document.getElementById('api-key-input');
+        if (apiKeyInput) {
+            apiKeyInput.value = apiKey;
+            apiKeyInput.oninput = (e) => {
+                apiKey = e.target.value;
+                localStorage.setItem('GEMINI_API_KEY', apiKey);
+            };
+        }
 
         const MODEL_OCR = "gemini-2.5-flash-preview-09-2025";
 

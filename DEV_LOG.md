@@ -32,13 +32,17 @@
 - **措施 F**：為了符合 SOP 與標準化開發，建立了 GitHub Actions 工作流 (`.github/workflows/deploy.yml`)。
 - **措施 G**：放棄手動推送 `gh-pages` 分支，改由 GitHub Actions 自動執行 `npm run build` 並部署至 Pages 伺服器，確保環境一致性。
 
+### 3.4 安全性與易用性優化 (2026-02-09)
+- **措施 H**：為了解決 API Key 安全性問題，在前端介面新增了密碼形式的 API Key 輸入框。
+- **措施 I**：實作 `localStorage` 持久化儲存金鑰，使用者只需輸入一次，刷新頁面後仍可保留，且金鑰不會被存入 Git 倉庫。
+
 ## 4. 驗證與測試流程 (SOP 實踐)
 1. **構建驗證**：運行 `npm run build` 成功。
-2. **路徑檢查**：確認 `dist/index.html` 已無絕對路徑引用的資源。
+2. **路徑檢查**：確認 `dist/index.html` 已無絕對路徑。
 3. **部署確認**：已透過 GitHub Actions 啟動自動部署流程。
 4. **人工測試項目 (待確認)**：
     - [x] 404 錯誤已排除。
-    - [x] 頁面標題正確顯示。
+    - [x] API Key 輸入框正常運作且可記憶。
     - [x] 外部庫載入成功。
     - [x] GitHub Actions 流程成功執行。
 
