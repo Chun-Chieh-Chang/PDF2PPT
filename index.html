@@ -25,28 +25,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <style>
-
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
 
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+        }
 
-       
+
 
         /* 全域文字大小修正為 11px */
 
-        .text-size-11 { font-size: 11px !important; }
+        .text-size-11 {
+            font-size: 11px !important;
+        }
 
-       
 
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563eb; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2563eb;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
 
-       
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
 
-        .pdf-view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--pdf-page-width, 100px), 1fr)); gap: 0.75rem; }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-       
+
+
+        .pdf-view-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--pdf-page-width, 100px), 1fr));
+            gap: 0.75rem;
+        }
+
+
 
         .slots-grid {
 
@@ -59,53 +82,115 @@
         }
 
 
-        .custom-scrollbar::-webkit-scrollbar { height: 5px; width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 5px;
+            width: 5px;
+        }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
 
-       
+
 
         /* 頁面卡片動態外框與背景變化 */
 
-        .page-card { transition: all 0.2s ease; border: 2px solid transparent; flex-shrink: 0; position: relative; }
+        .page-card {
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+            position: relative;
+        }
 
-        .page-card.para-active { border-color: #3b82f6; background-color: #eff6ff; box-shadow: 0 0 10px rgba(59, 130, 246, 0.1); }
+        .page-card.para-active {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+        }
 
-        .page-card:hover { transform: translateY(-2px); }
+        .page-card:hover {
+            transform: translateY(-2px);
+        }
 
-       
+
 
         /* 段落辨識標籤 */
 
-        .para-badge { position: absolute; bottom: 4px; right: 4px; background: #3b82f6; color: white; padding: 2px 4px; border-radius: 4px; font-size: 9px; font-weight: 900; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+        .para-badge {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: #3b82f6;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 900;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
 
-        .para-active .para-badge { opacity: 1; }
+        .para-active .para-badge {
+            opacity: 1;
+        }
 
 
-        .slot-card { transition: all 0.2s ease; border: 1px solid #e2e8f0; }
+        .slot-card {
+            transition: all 0.2s ease;
+            border: 1px solid #e2e8f0;
+        }
 
-        .slot-card:hover { border-color: #3b82f6; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .slot-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
 
-       
+
 
         /* 輸入框樣式 */
 
-        .input-compact { @apply border border-slate-200 rounded px-2 py-1 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all font-bold text-slate-700 bg-white shadow-sm; font-size: 11px; }
+        .input-compact {
+            @apply border border-slate-200 rounded px-2 py-1 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all font-bold text-slate-700 bg-white shadow-sm;
+            font-size: 11px;
+        }
 
-       
-
-        .waiting-badge { background: #64748b; color: white; padding: 1px 6px; border-radius: 4px; font-weight: 900; font-size: 11px; }
 
 
-        .log-console { background: #0f172a; color: #10b981; font-family: monospace; font-size: 11px; padding: 8px; border-radius: 8px; height: 120px; overflow-y: auto; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        .waiting-badge {
+            background: #64748b;
+            color: white;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 900;
+            font-size: 11px;
+        }
 
-        .log-line { margin-bottom: 1px; }
 
-        .log-line::before { content: "> "; opacity: 0.5; }
+        .log-console {
+            background: #0f172a;
+            color: #10b981;
+            font-family: monospace;
+            font-size: 11px;
+            padding: 8px;
+            border-radius: 8px;
+            height: 120px;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
+        .log-line {
+            margin-bottom: 1px;
+        }
+
+        .log-line::before {
+            content: "> ";
+            opacity: 0.5;
+        }
     </style>
 
-<script type="importmap">
+    <script type="importmap">
 
 {
 
@@ -139,7 +224,8 @@
 
             <div class="flex items-baseline gap-2">
 
-                <h1 class="text-xl font-black text-slate-900 tracking-tighter italic leading-none">觀點LAB｜NLM PDF <span class="text-blue-600 font-black">PRO V2</span></h1>
+                <h1 class="text-xl font-black text-slate-900 tracking-tighter italic leading-none">觀點LAB｜NLM PDF <span
+                        class="text-blue-600 font-black">PRO V2</span></h1>
 
                 <p class="text-slate-400 font-bold hidden md:block text-size-11">高精度佈局還原系統</p>
 
@@ -147,7 +233,8 @@
 
             <div class="bg-white px-2 py-1 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
 
-                <span class="font-black text-slate-400 uppercase tracking-widest leading-none text-size-11">STATUS</span>
+                <span
+                    class="font-black text-slate-400 uppercase tracking-widest leading-none text-size-11">STATUS</span>
 
                 <span class="font-black text-emerald-600 flex items-center gap-1 leading-none text-size-11">
 
@@ -164,17 +251,20 @@
 
         <section class="mb-6 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
 
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-2 border-b border-slate-50 pb-2">
+            <div
+                class="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-2 border-b border-slate-50 pb-2">
 
                 <div class="flex items-center gap-2">
 
-                    <div class="w-5 h-5 bg-slate-900 text-white rounded flex items-center justify-center font-black text-size-11">1</div>
+                    <div
+                        class="w-5 h-5 bg-slate-900 text-white rounded flex items-center justify-center font-black text-size-11">
+                        1</div>
 
                     <h2 class="font-black text-slate-800 tracking-tight text-center text-size-11">PDF 高精細解析</h2>
 
                 </div>
 
-               
+
 
                 <div id="pdf-controls" class="hidden flex flex-wrap items-center gap-2">
 
@@ -182,29 +272,35 @@
 
                     <div class="flex gap-1 border-r border-slate-200 pr-2 mr-1">
 
-                        <button id="batch-para-on" class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded-md font-black shadow-sm transition text-[10px] leading-none">一鍵開啟全部段落</button>
+                        <button id="batch-para-on"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded-md font-black shadow-sm transition text-[10px] leading-none">一鍵開啟全部段落</button>
 
-                        <button id="batch-para-off" class="bg-slate-200 hover:bg-slate-300 text-slate-600 px-2.5 py-1 rounded-md font-black transition text-[10px] leading-none">一鍵取消全部段落</button>
+                        <button id="batch-para-off"
+                            class="bg-slate-200 hover:bg-slate-300 text-slate-600 px-2.5 py-1 rounded-md font-black transition text-[10px] leading-none">一鍵取消全部段落</button>
 
                     </div>
 
 
                     <div class="flex items-center gap-1.5 pl-2">
 
-                        <span class="font-black text-slate-400 tracking-widest uppercase leading-none text-size-11">縮放</span>
+                        <span
+                            class="font-black text-slate-400 tracking-widest uppercase leading-none text-size-11">縮放</span>
 
-                        <input type="range" id="pdf-zoom-range" min="100" max="400" value="100" class="h-1 w-24 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <input type="range" id="pdf-zoom-range" min="100" max="400" value="100"
+                            class="h-1 w-24 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
 
                     </div>
 
-                    <button id="add-all-pages-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md font-black shadow-sm transition leading-none text-size-11">全部導入工作台2</button>
+                    <button id="add-all-pages-btn"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md font-black shadow-sm transition leading-none text-size-11">全部導入工作台2</button>
 
                 </div>
 
             </div>
 
 
-            <div id="pdf-drop-zone" class="border-2 border-dashed border-slate-100 rounded-xl p-3 text-center cursor-pointer hover:border-blue-300 hover:bg-slate-50 transition-all group relative">
+            <div id="pdf-drop-zone"
+                class="border-2 border-dashed border-slate-100 rounded-xl p-3 text-center cursor-pointer hover:border-blue-300 hover:bg-slate-50 transition-all group relative">
 
                 <input type="file" id="pdf-file-input" class="hidden" accept="application/pdf">
 
@@ -218,58 +314,76 @@
 
                     <div class="flex items-center justify-between bg-slate-50 px-2 py-1 rounded-lg mb-2">
 
-                        <span id="page-count-tag" class="bg-slate-900 text-white px-1.5 py-0.5 rounded font-black uppercase tracking-tighter text-size-11">0 PAGES</span>
+                        <span id="page-count-tag"
+                            class="bg-slate-900 text-white px-1.5 py-0.5 rounded font-black uppercase tracking-tighter text-size-11">0
+                            PAGES</span>
 
                         <div class="flex gap-1.5 items-center flex-wrap justify-end">
 
-                            <input type="text" id="pdf-export-name" value="A1" placeholder="檔名..." class="input-compact w-20">
+                            <input type="text" id="pdf-export-name" value="A1" placeholder="檔名..."
+                                class="input-compact w-20">
 
-                           
+
 
                             <!-- 文字辨識模式組 -->
 
                             <div class="flex items-center gap-1">
 
-                                <div class="flex items-center gap-1 bg-slate-100 px-1.5 py-1 rounded border border-slate-200 hover:bg-white transition-colors cursor-pointer group/mode">
+                                <div
+                                    class="flex items-center gap-1 bg-slate-100 px-1.5 py-1 rounded border border-slate-200 hover:bg-white transition-colors cursor-pointer group/mode">
 
-                                    <input type="checkbox" id="pdf-ocr-precision-check" class="w-3 h-3 rounded border-none text-emerald-600 focus:ring-0 cursor-pointer">
+                                    <input type="checkbox" id="pdf-ocr-precision-check"
+                                        class="w-3 h-3 rounded border-none text-emerald-600 focus:ring-0 cursor-pointer">
 
-                                    <label for="pdf-ocr-precision-check" class="font-black text-slate-500 leading-none cursor-pointer group-hover/mode:text-emerald-600 text-size-11">逐行模式</label>
+                                    <label for="pdf-ocr-precision-check"
+                                        class="font-black text-slate-500 leading-none cursor-pointer group-hover/mode:text-emerald-600 text-size-11">逐行模式</label>
 
                                 </div>
 
-                                <div class="flex items-center gap-1 bg-slate-100 px-1.5 py-1 rounded border border-slate-200 hover:bg-white transition-colors cursor-pointer group/para">
+                                <div
+                                    class="flex items-center gap-1 bg-slate-100 px-1.5 py-1 rounded border border-slate-200 hover:bg-white transition-colors cursor-pointer group/para">
 
-                                    <input type="checkbox" id="pdf-ocr-paragraph-check" class="w-3 h-3 rounded border-none text-blue-600 focus:ring-0 cursor-pointer">
+                                    <input type="checkbox" id="pdf-ocr-paragraph-check"
+                                        class="w-3 h-3 rounded border-none text-blue-600 focus:ring-0 cursor-pointer">
 
-                                    <label for="pdf-ocr-paragraph-check" class="font-black text-slate-500 leading-none cursor-pointer group-hover/para:text-blue-600 text-size-11">全域段落辨識</label>
+                                    <label for="pdf-ocr-paragraph-check"
+                                        class="font-black text-slate-500 leading-none cursor-pointer group-hover/para:text-blue-600 text-size-11">全域段落辨識</label>
 
                                 </div>
 
                                 <!-- 新增：NotebookLM 最佳化勾選 -->
 
-                                <div class="flex items-center gap-1 bg-purple-50 px-1.5 py-1 rounded border border-purple-200 hover:bg-white transition-colors cursor-pointer group/nlm-opt">
+                                <div
+                                    class="flex items-center gap-1 bg-purple-50 px-1.5 py-1 rounded border border-purple-200 hover:bg-white transition-colors cursor-pointer group/nlm-opt">
 
-                                    <input type="checkbox" id="pdf-ocr-notebooklm-check" class="w-3 h-3 rounded border-none text-purple-600 focus:ring-0 cursor-pointer">
+                                    <input type="checkbox" id="pdf-ocr-notebooklm-check"
+                                        class="w-3 h-3 rounded border-none text-purple-600 focus:ring-0 cursor-pointer">
 
-                                    <label for="pdf-ocr-notebooklm-check" class="font-black text-purple-600 leading-none cursor-pointer group-hover/nlm-opt:text-purple-700 text-size-11">NotebookLM 最佳化</label>
+                                    <label for="pdf-ocr-notebooklm-check"
+                                        class="font-black text-purple-600 leading-none cursor-pointer group-hover/nlm-opt:text-purple-700 text-size-11">NotebookLM
+                                        最佳化</label>
 
                                 </div>
 
                             </div>
 
 
-                            <button id="pdf-to-pptx-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded font-black shadow-sm transition flex items-center gap-1.5 text-size-11">
+                            <button id="pdf-to-pptx-btn"
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded font-black shadow-sm transition flex items-center gap-1.5 text-size-11">
 
                                 <span id="pptx-btn-text">視覺還原 PPTX</span>
 
-                                <div id="pptx-loader" class="loader !w-2.5 !h-2.5 !border-white !border-t-transparent hidden"></div>
+                                <div id="pptx-loader"
+                                    class="loader !w-2.5 !h-2.5 !border-white !border-t-transparent hidden"></div>
 
                             </button>
 
-                            <button id="pdf-download-backup-btn" class="hidden bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded font-black shadow-md transition-all animate-bounce text-size-11">還原下載 (備份)</button>
+                            <button id="pdf-download-backup-btn"
+                                class="hidden bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded font-black shadow-md transition-all animate-bounce text-size-11">還原下載
+                                (備份)</button>
 
-                            <button id="clear-pdf-btn" class="font-black text-red-500 hover:underline text-size-11">清除數據</button>
+                            <button id="clear-pdf-btn"
+                                class="font-black text-red-500 hover:underline text-size-11">清除數據</button>
 
                         </div>
 
@@ -288,25 +402,31 @@
 
         <section class="mb-6 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
 
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-3 gap-2 border-b border-slate-50 pb-2">
+            <div
+                class="flex flex-col md:flex-row md:items-center justify-between mb-3 gap-2 border-b border-slate-50 pb-2">
 
                 <div class="flex items-center gap-2">
 
-                    <div class="w-5 h-5 bg-blue-600 text-white rounded flex items-center justify-center font-black text-size-11">2</div>
+                    <div
+                        class="w-5 h-5 bg-blue-600 text-white rounded flex items-center justify-center font-black text-size-11">
+                        2</div>
 
                     <h2 class="font-black text-slate-800 tracking-tight text-size-11">圖片去文字工作台</h2>
 
                 </div>
 
-               
+
 
                 <div class="flex items-center gap-2 flex-wrap">
 
                     <div id="result-export-group" class="hidden flex items-center gap-2">
 
-                        <input type="text" id="results-export-name" value="B1" placeholder="檔名..." class="input-compact w-24">
+                        <input type="text" id="results-export-name" value="B1" placeholder="檔名..."
+                            class="input-compact w-24">
 
-                        <button id="export-results-pptx-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-black shadow-md transition-all text-size-11">導出結果 PPTX</button>
+                        <button id="export-results-pptx-btn"
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-black shadow-md transition-all text-size-11">導出結果
+                            PPTX</button>
 
                     </div>
 
@@ -315,33 +435,41 @@
 
                         <div class="flex items-center gap-2">
 
-                            <label class="font-black text-slate-400 tracking-widest uppercase text-size-11">工作台網格</label>
+                            <label
+                                class="font-black text-slate-400 tracking-widest uppercase text-size-11">工作台網格</label>
 
-                            <input type="range" id="slot-zoom-range" min="100" max="400" value="100" class="h-1 w-24 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            <input type="range" id="slot-zoom-range" min="100" max="400" value="100"
+                                class="h-1 w-24 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
 
                         </div>
 
                         <div class="w-px h-3 bg-slate-300"></div>
 
-                        <button id="clear-all-slots-btn" class="hidden font-black text-red-500 hover:text-red-700 transition-colors text-size-11">清空工作台</button>
+                        <button id="clear-all-slots-btn"
+                            class="hidden font-black text-red-500 hover:text-red-700 transition-colors text-size-11">清空工作台</button>
 
                     </div>
 
 
-                    <button id="process-all-btn" class="bg-slate-900 hover:bg-black text-white px-4 py-1.5 rounded-lg font-black shadow-lg hidden transition-all active:scale-95 text-size-11">批次去文字</button>
+                    <button id="process-all-btn"
+                        class="bg-slate-900 hover:bg-black text-white px-4 py-1.5 rounded-lg font-black shadow-lg hidden transition-all active:scale-95 text-size-11">批次去文字</button>
 
                 </div>
 
             </div>
 
 
-            <div id="master-drop-zone" class="border-2 border-dashed border-slate-100 rounded-xl p-3 text-center cursor-pointer hover:border-blue-300 hover:bg-slate-50 transition-all mb-3 group relative overflow-hidden">
+            <div id="master-drop-zone"
+                class="border-2 border-dashed border-slate-100 rounded-xl p-3 text-center cursor-pointer hover:border-blue-300 hover:bg-slate-50 transition-all mb-3 group relative overflow-hidden">
 
                 <input type="file" id="master-file-input" class="hidden" accept="image/*" multiple>
 
                 <div class="flex items-center justify-center gap-2">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
 
                     <p class="text-slate-500 font-bold leading-none text-size-11">導入圖片進行處理</p>
 
@@ -359,11 +487,14 @@
 
         <section class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
 
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-3 border-b border-slate-50 pb-2 gap-2">
+            <div
+                class="flex flex-col md:flex-row md:items-center justify-between mb-3 border-b border-slate-50 pb-2 gap-2">
 
                 <div class="flex items-center gap-2">
 
-                    <div class="w-5 h-5 bg-emerald-600 text-white rounded flex items-center justify-center font-black text-size-11">3</div>
+                    <div
+                        class="w-5 h-5 bg-emerald-600 text-white rounded flex items-center justify-center font-black text-size-11">
+                        3</div>
 
                     <h2 class="font-black text-slate-800 tracking-tight leading-none text-size-11">PPTX 內容魔法合併</h2>
 
@@ -371,35 +502,42 @@
 
                 <div class="flex items-center gap-2">
 
-                    <input type="text" id="merge-export-name" value="Merged_Result" placeholder="檔名..." class="input-compact w-32 text-size-11">
+                    <input type="text" id="merge-export-name" value="Merged_Result" placeholder="檔名..."
+                        class="input-compact w-32 text-size-11">
 
-                    <span class="font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded italic text-size-11">文字內容 + 背景模板</span>
+                    <span
+                        class="font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded italic text-size-11">文字內容
+                        + 背景模板</span>
 
                 </div>
 
             </div>
 
-           
+
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
 
-                <div id="pptx-text-drop" class="border border-dashed border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-400 bg-slate-50 transition-all flex flex-col items-center justify-center min-h-[80px]">
+                <div id="pptx-text-drop"
+                    class="border border-dashed border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-400 bg-slate-50 transition-all flex flex-col items-center justify-center min-h-[80px]">
 
                     <input type="file" id="pptx-text-input" class="hidden" accept=".pptx">
 
                     <p class="font-black text-slate-600 leading-none text-size-11">1. 選擇文字來源檔 (還原出的 PPTX)</p>
 
-                    <span id="pptx-text-name" class="text-slate-400 italic mt-1 truncate max-w-full text-size-11">尚未選擇檔案</span>
+                    <span id="pptx-text-name"
+                        class="text-slate-400 italic mt-1 truncate max-w-full text-size-11">尚未選擇檔案</span>
 
                 </div>
 
-                <div id="pptx-bg-drop" class="border border-dashed border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-emerald-400 bg-slate-50 transition-all flex flex-col items-center justify-center min-h-[80px]">
+                <div id="pptx-bg-drop"
+                    class="border border-dashed border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-emerald-400 bg-slate-50 transition-all flex flex-col items-center justify-center min-h-[80px]">
 
                     <input type="file" id="pptx-bg-input" class="hidden" accept=".pptx">
 
                     <p class="font-black text-slate-600 leading-none text-size-11">2. 選擇背景基底檔 (視覺模版)</p>
 
-                    <span id="pptx-bg-name" class="text-slate-400 italic mt-1 truncate max-w-full text-size-11">尚未選擇檔案</span>
+                    <span id="pptx-bg-name"
+                        class="text-slate-400 italic mt-1 truncate max-w-full text-size-11">尚未選擇檔案</span>
 
                 </div>
 
@@ -408,7 +546,8 @@
 
             <div class="flex flex-col items-center gap-3">
 
-                <button id="start-merge-btn" class="bg-slate-900 hover:bg-black text-white px-10 py-2 rounded-xl font-black shadow-lg transition-all text-size-11">執行合併</button>
+                <button id="start-merge-btn"
+                    class="bg-slate-900 hover:bg-black text-white px-10 py-2 rounded-xl font-black shadow-lg transition-all text-size-11">執行合併</button>
 
                 <div id="merge-log-container" class="w-full hidden">
 
@@ -416,7 +555,8 @@
 
                         <span class="font-black text-slate-400 uppercase italic text-size-11">處理進度日誌</span>
 
-                        <button id="download-merged-btn" class="hidden bg-emerald-600 text-white px-2 py-0.5 rounded font-black animate-pulse text-size-11">下載合併結果</button>
+                        <button id="download-merged-btn"
+                            class="hidden bg-emerald-600 text-white px-2 py-0.5 rounded font-black animate-pulse text-size-11">下載合併結果</button>
 
                     </div>
 
@@ -439,7 +579,8 @@
 
             <div class="flex justify-between items-center mb-1">
 
-                <span class="font-black text-blue-600 slot-label uppercase tracking-tighter text-size-11 italic">ITEM 01</span>
+                <span class="font-black text-blue-600 slot-label uppercase tracking-tighter text-size-11 italic">ITEM
+                    01</span>
 
                 <button class="remove-btn text-slate-300 hover:text-red-500 font-black text-sm px-1">×</button>
 
@@ -447,11 +588,13 @@
 
             <div class="space-y-1.5 flex-grow">
 
-                <div class="aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-50 relative group shadow-inner">
+                <div
+                    class="aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-50 relative group shadow-inner">
 
                     <img class="original-img w-full h-full object-contain" src="">
 
-                    <div class="slot-loader absolute inset-0 bg-white/80 hidden flex flex-col items-center justify-center">
+                    <div
+                        class="slot-loader absolute inset-0 bg-white/80 hidden flex flex-col items-center justify-center">
 
                         <div class="loader mb-1"></div>
 
@@ -459,15 +602,19 @@
 
                     </div>
 
-                    <div class="slot-waiting absolute inset-0 bg-slate-900/10 hidden flex flex-col items-center justify-center font-black"><span class="waiting-badge text-size-11">QUEUED</span></div>
+                    <div
+                        class="slot-waiting absolute inset-0 bg-slate-900/10 hidden flex flex-col items-center justify-center font-black">
+                        <span class="waiting-badge text-size-11">QUEUED</span></div>
 
                 </div>
 
-                <div class="aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-50 relative flex items-center justify-center text-center shadow-inner">
+                <div
+                    class="aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-50 relative flex items-center justify-center text-center shadow-inner">
 
                     <img class="result-img w-full h-full object-contain hidden" src="">
 
-                    <div class="placeholder text-slate-200 italic font-black uppercase text-size-11">Waiting Result</div>
+                    <div class="placeholder text-slate-200 italic font-black uppercase text-size-11">Waiting Result
+                    </div>
 
                 </div>
 
@@ -475,11 +622,18 @@
 
             <div class="flex gap-1.5 mt-2.5">
 
-                <button class="process-btn bg-slate-900 hover:bg-black text-white py-1.5 rounded-md flex-1 font-black transition-all leading-none text-size-11">去文字處理</button>
+                <button
+                    class="process-btn bg-slate-900 hover:bg-black text-white py-1.5 rounded-md flex-1 font-black transition-all leading-none text-size-11">去文字處理</button>
 
-                <button class="download-btn bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 rounded-md font-black disabled:opacity-10 transition-all leading-none" disabled>
+                <button
+                    class="download-btn bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 rounded-md font-black disabled:opacity-10 transition-all leading-none"
+                    disabled>
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
 
                 </button>
 
@@ -490,7 +644,9 @@
     </template>
 
 
-    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-xl opacity-0 transition-all pointer-events-none z-50 font-black text-size-11"></div>
+    <div id="toast"
+        class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-xl opacity-0 transition-all pointer-events-none z-50 font-black text-size-11">
+    </div>
 
 
     <script>
@@ -707,7 +863,7 @@
 
         document.getElementById('pdf-drop-zone').onclick = (e) => {
 
-            if(!e.target.closest('#pdf-preview-container')) document.getElementById('pdf-file-input').click();
+            if (!e.target.closest('#pdf-preview-container')) document.getElementById('pdf-file-input').click();
 
         };
 
@@ -760,7 +916,7 @@
 
         async function processPdf(file) {
 
-            if(!file || file.type !== 'application/pdf') return;
+            if (!file || file.type !== 'application/pdf') return;
 
             showToast('正在解析 PDF...');
 
@@ -802,7 +958,7 @@
 
                     const pageId = `pdf_page_${Date.now()}_${i}`;
 
-                   
+
 
                     const pageData = { id: pageId, url: dataUrl, localParagraphMode: false };
 
@@ -843,7 +999,7 @@
 
                     `;
 
-                   
+
 
                     const localParaCheck = div.querySelector('.local-para-check');
 
@@ -855,13 +1011,13 @@
 
                     };
 
-                   
+
 
                     div.querySelector('.add-btn').onclick = (e) => { e.stopPropagation(); createNewSlot(dataUrl); showToast('已導入工作台'); };
 
                     div.querySelector('.del-page-btn').onclick = (e) => { e.stopPropagation(); removePdfPage(pageId); showToast('已移除該頁面'); };
 
-                   
+
 
                     pdfPagesList.appendChild(div);
 
@@ -958,11 +1114,11 @@
 
             const notebookLMMode = document.getElementById('pdf-ocr-notebooklm-check').checked;
 
-           
+
 
             btn.disabled = true; ldr.classList.remove('hidden'); pdfDownloadBackupBtn.classList.add('hidden');
 
-           
+
 
             try {
 
@@ -974,17 +1130,17 @@
 
                     const pageData = currentPdfPageUrls[i];
 
-                    txt.textContent = `辨識中 (${i+1}/${currentPdfPageUrls.length})`;
+                    txt.textContent = `辨識中 (${i + 1}/${currentPdfPageUrls.length})`;
 
                     const base64 = pageData.url.split(',')[1];
 
-                   
+
 
                     const activeParagraphMode = globalParagraphMode || pageData.localParagraphMode;
 
                     const blocks = await callAiOcr(base64, precisionMode, activeParagraphMode, notebookLMMode);
 
-                   
+
 
                     const slide = pptx.addSlide(); slide.background = { fill: "FFFFFF" };
 
@@ -1010,7 +1166,7 @@
 
                                 fontSize: block.font_size || 12,
 
-                                color: block.color?.replace('#','') || '000000',
+                                color: block.color?.replace('#', '') || '000000',
 
                                 bold: block.is_bold || false, align: block.align || 'left', valign: 'middle'
 
@@ -1047,7 +1203,7 @@
 
             let prompt = "請辨識圖片中所有文字。回傳 JSON ARRAY，每個物件包含：text, box_2d [ymin, xmin, ymax, xmax], font_size, is_bold, align, color。座標比例 0-1000。";
 
-           
+
 
             if (notebookLMMode) {
 
@@ -1061,7 +1217,7 @@
 
             }
 
-           
+
 
             if (precisionMode) prompt += " 採取「逐行掃描模式」極其精確地辨識每一行。";
 
@@ -1281,9 +1437,9 @@
 
                 const getSlideNum = (path) => parseInt(path.match(/slide(\d+)\.xml/)[1]);
 
-                const textSlides = Object.keys(textContent.files).filter(p => p.match(/ppt\/slides\/slide\d+\.xml/)).sort((a,b) => getSlideNum(a) - getSlideNum(b));
+                const textSlides = Object.keys(textContent.files).filter(p => p.match(/ppt\/slides\/slide\d+\.xml/)).sort((a, b) => getSlideNum(a) - getSlideNum(b));
 
-                const bgSlides = Object.keys(bgContent.files).filter(p => p.match(/ppt\/slides\/slide\d+\.xml/)).sort((a,b) => getSlideNum(a) - getSlideNum(b));
+                const bgSlides = Object.keys(bgContent.files).filter(p => p.match(/ppt\/slides\/slide\d+\.xml/)).sort((a, b) => getSlideNum(a) - getSlideNum(b));
 
                 const parser = new DOMParser(); const serializer = new XMLSerializer();
 
@@ -1291,7 +1447,7 @@
 
                 for (let i = 0; i < limit; i++) {
 
-                    addPptxLog(`移植第 ${i+1} 頁內容...`);
+                    addPptxLog(`移植第 ${i + 1} 頁內容...`);
 
                     const tXml = await textContent.file(textSlides[i]).async("string");
 
@@ -1305,7 +1461,7 @@
 
                         const trees = doc.getElementsByTagName("*");
 
-                        for(let el of trees) if(el.localName === 'spTree') return el;
+                        for (let el of trees) if (el.localName === 'spTree') return el;
 
                         return null;
 
@@ -1408,8 +1564,7 @@
 
     </script>
 
-<script type="module" src="/index.tsx"></script>
+
 </body>
 
 </html>
-
