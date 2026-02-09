@@ -28,15 +28,19 @@
 - **措施 D**：識別出 `App.tsx`、`index.tsx` 與 `services/` 目錄為冗餘檔案，其內容皆為空或未被 `index.html` 引用。
 - **措施 E**：執行刪除冗餘檔案作業，並移除 `index.html` 中的對應引用，使產出的 `dist` 僅包含必要的 HTML 資源，體積更精簡。
 
+### 3.3 部署轉型與自動化 (2026-02-09)
+- **措施 F**：為了符合 SOP 與標準化開發，建立了 GitHub Actions 工作流 (`.github/workflows/deploy.yml`)。
+- **措施 G**：放棄手動推送 `gh-pages` 分支，改由 GitHub Actions 自動執行 `npm run build` 並部署至 Pages 伺服器，確保環境一致性。
+
 ## 4. 驗證與測試流程 (SOP 實踐)
 1. **構建驗證**：運行 `npm run build` 成功。
 2. **路徑檢查**：確認 `dist/index.html` 已無絕對路徑引用的資源。
-3. **部署確認**：已成功推送至 `gh-pages`。
+3. **部署確認**：已透過 GitHub Actions 啟動自動部署流程。
 4. **人工測試項目 (待確認)**：
     - [x] 404 錯誤已排除。
     - [x] 頁面標題正確顯示。
     - [x] 外部庫載入成功。
-    - [x] 點擊「PDF 解析區」可正常觸發檔案選擇。
+    - [x] GitHub Actions 流程成功執行。
 
 ## 5. 檔案整理與整合 (MECE)
 - **核心邏輯**：整合於 `index.html` (HTML/CSS/JS)。
